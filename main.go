@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net"
+	"os"
 	"sync"
 
 	"github.com/gookit/color"
@@ -110,7 +111,11 @@ func handleConnection(conn net.Conn, messages chan message, numClients *int, num
 }
 
 func main() {
-	ln, err := net.Listen("tcp", ":8080")
+	port := "8080"
+	if len(os.Args) >= 2 {
+		port = os.Args[1]
+	}
+	ln, err := net.Listen("tcp", fmt.Sprintf(":%s", port))
 
 	numClientsMutex := &sync.Mutex{}
 	numClients := 0
